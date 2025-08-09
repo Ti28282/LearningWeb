@@ -1,0 +1,10 @@
+services:
+
+  api:
+    build: ./LearningWeb
+
+  db:
+    image: postgres
+    restart: always
+
+    
