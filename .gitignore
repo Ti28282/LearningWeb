@@ -1,2 +1,12 @@
+# Backend
 Backend/.python-version
 Backend/.venv
+Backend/.env
+Backend/backend.env
+Backend/.env.template
+# Frontend
+
+
+
+# global 
+.env

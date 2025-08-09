@@ -1,10 +1,29 @@
 services:
 
   api:
-    build: ./LearningWeb
+    build: ./Backend
+    ports:
+      - "5010:5010"
 
   db:
     image: postgres
     restart: always
-
+    environment:
+      - POSTGRES_DB = ${APP_CONFIG_DB_NAME}
+      - POSTGRES_USER = ${APP_CONFIG_DB_USER}
+      - POSTGRES_PASSWORD = ${APP_CONFIG_DB_PASSWORD}
     
+    ports:
+      - "5432:5432"
+
+  adminer:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL = ${}
+      - PGADMIN_DEFAULT_PASSWORD = ${}
+      - PGADMIN_CONFIG_SERVER_MODE = 'False' 
+    ports: 
+      - "5050:80"
+
+
+  
