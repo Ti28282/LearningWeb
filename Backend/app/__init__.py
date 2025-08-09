@@ -1,12 +1,21 @@
 import asyncio
 import uvicorn
-from fastapi import FastAPI
+
+from fastapi import FastAPI, HTTPException, Depends, Request
+from fastapi.responses import JSONResponse
+from fastapi_jwt_auth.exceptions import AuthJWTException
+
 
 # todo LOGGING FastAPI
 
 app = FastAPI()
 
-
+@app.exception_handler(AuthJWTException)
+def authjwt_exception_handler(request: Request, exc: AuthJWTException):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": exc.message}
+    )
 
 
 async def main():

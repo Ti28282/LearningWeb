@@ -1,12 +1,9 @@
 services:
 
-  api:
-    build: ./Backend
-    ports:
-      - "5010:5010"
-
+  
   db:
     image: postgres
+    container_name: postgresDB
     restart: always
     environment:
       - POSTGRES_DB = ${APP_CONFIG_DB_NAME}
@@ -15,6 +12,14 @@ services:
     
     ports:
       - "5432:5432"
+
+  api:
+      build: ./Backend
+      ports:
+        - "5010:5010"
+      depends_on:
+        - db
+
 
   adminer:
     image: dpage/pgadmin4
