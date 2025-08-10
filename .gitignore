@@ -4,6 +4,7 @@ Backend/.venv
 Backend/.env
 Backend/backend.env
 Backend/.env.template
+Backend/alembic.ini
 # Frontend
 
 

@@ -4,8 +4,9 @@ from fastapi import FastAPI, HTTPException, Depends, Request
 #from fastapi_jwt_auth import AuthJWT
 #from fastapi_jwt_auth.exceptions import AuthJWTException
 
-from pydantic import BaseModel
-
+from pydantic import BaseModel, EmailStr
+from typing import Annotated
+from annotated_types import MaxLen, MinLen
 from os import environ, path
 from dotenv import load_dotenv
 
@@ -13,7 +14,8 @@ load_dotenv("/.env")
 
 
 class User(BaseModel):
-    login: str
+    username: str = Annotated[str, MinLen(3), MaxLen(20)]
+    email: EmailStr
     password: str
 
 '''

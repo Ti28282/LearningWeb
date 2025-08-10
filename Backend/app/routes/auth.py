@@ -1,16 +1,29 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
 #from fastapi_jwt_auth import AuthJWT
 from schemas import User
+from database.models import crud
+auth = APIRouter(prefix = "/api/v0/users", tags = ["auth"])
+# Connect Postgres
+# Validation
+# save after enter code send to your email
 
-auth = APIRouter(prefix = "/api/v0")
 
-@auth.get("/test")
-def test():
-    return {"hello":"World"}
+@auth.post("/add")
+def create_user(user: User):
+    return crud.create_user(user_in = user)
 
-@auth.post("/login")
-def login(user: User):
-    return {user.login: user.password}
+@auth.put("/update")
+def update_user(user: User):
+    return crud.update_user(user_in = user)
+
+@auth.get("/get")
+def search_user():
+    return crud.read_user()
+
+@auth.delete("/delete")
+def delete_user(user: User):
+    return crud.delete_user(user_in = user)
+
 
 '''
 

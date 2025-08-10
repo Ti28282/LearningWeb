@@ -6,9 +6,9 @@ services:
     container_name: postgresDB
     restart: always
     environment:
-      - POSTGRES_DB = ${APP_CONFIG_DB_NAME}
-      - POSTGRES_USER = ${APP_CONFIG_DB_USER}
-      - POSTGRES_PASSWORD = ${APP_CONFIG_DB_PASSWORD}
+      - POSTGRES_DB=${APP_CONFIG_DB_NAME}
+      - POSTGRES_USER=${APP_CONFIG_DB_USER}
+      - POSTGRES_PASSWORD=${APP_CONFIG_DB_PASSWORD}
     
     ports:
       - "5432:5432"
@@ -24,9 +24,9 @@ services:
   adminer:
     image: dpage/pgadmin4
     environment:
-      - PGADMIN_DEFAULT_EMAIL = ${}
-      - PGADMIN_DEFAULT_PASSWORD = ${}
-      - PGADMIN_CONFIG_SERVER_MODE = 'False' 
+      - PGADMIN_DEFAULT_EMAIL=${PG_ADMIN_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PG_ADMIN_PASSWORD}
+      - PGADMIN_CONFIG_SERVER_MODE='False' 
     ports: 
       - "5050:80"
 
