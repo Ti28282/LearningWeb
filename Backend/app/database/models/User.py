@@ -1,18 +1,32 @@
-from sqlalchemy import ForeignKey, text, Text
-from sqlalchemy.orm import relationship, Mapped, mapped_column
-from datetime import date
-from app.database.database import int_pk, str_null_true, str_uniq, Base
+from sqlalchemy import String, ForeignKey, DateTime, Column
+from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import Mapped, mapped_column
+from datetime import datetime, timezone
+from passlib.context import CryptContext
 
-class User(Base):
-    id: Mapped[int_pk]
-    email: Mapped[str_uniq]
-    username: Mapped[str_null_true]
-    password: Mapped[str_null_true]
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-    def __str__(self):
-        return (f"{self.__class__.__name__}(id = {self.id}),"
-                f"user_name = {self.username},"
-                f"email = {self.email}")
+def hash_password(password: str) -> str:
+    return pwd_context.hash(password)
 
-    def __repr__(self):
-        return str(self)
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return pwd_context.verify(plain_password, hashed_password)
+
+class Base(DeclarativeBase):
+    pass
+
+class UserModel(Base):
+    __tablename__ = "user_account"
+
+    id: Mapped[int] = mapped_column(primary_key = True, autoincrement = True)
+    username: Mapped[str] = mapped_column(String(20), index = True)
+    email: Mapped[str] = mapped_column(String(100), unique = True, index = True)
+    password: Mapped[str] = mapped_column(String(128))
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone = True), 
+        default =  lambda: datetime.now(timezone.utc),  
+        onupdate = lambda: datetime.now(timezone.utc)
+    )
+
+    def __repr__(self): 
+        return f"<User(id={self.id}, username={self.username}, email={self.email})>"

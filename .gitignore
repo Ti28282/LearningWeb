@@ -5,9 +5,21 @@ Backend/.env
 Backend/backend.env
 Backend/.env.template
 Backend/alembic.ini
+Backend/app/.env
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+*.pyo
+
+
+*.lock
+# Logs
+Backend/app/sqlalchemy.logs
+Backend/app/*.logs
 # Frontend
 
 
-
 # global 
-.env
+
+.env.docker

@@ -13,19 +13,8 @@ from dotenv import load_dotenv
 load_dotenv("/.env")
 
 
-class User(BaseModel):
+class UserSchema(BaseModel):
     username: str = Annotated[str, MinLen(3), MaxLen(20)]
     email: EmailStr
     password: str
 
-'''
-class Settings(BaseModel):
-    authjwt_secret_key: str = environ.get("APP_CONFIG_SECRET_KEY")
-'''
-
-'''
-@AuthJWT.load_config
-def get_config():
-    return Settings()
-
-'''
