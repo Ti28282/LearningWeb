@@ -22,8 +22,10 @@ class UserPasswordSchema(BaseModel):
 class UserSchema(UserNameSchema, UserEmailSchema, UserPasswordSchema):
     ...
 
-class UserDeleteSchema(UserNameSchema, UserEmailSchema):
+class UserDeleteSchema(UserEmailSchema, UserPasswordSchema):
     ...
 
 
-    
+class UserUpdateSchema(UserEmailSchema, UserPasswordSchema):
+    new_username: str = Field(max_length = 20)
+    new_password: str = Field(max_length = 100, min_length = 4)
