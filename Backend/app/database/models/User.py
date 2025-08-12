@@ -1,8 +1,10 @@
 from sqlalchemy import String, ForeignKey, DateTime, Column
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import Mapped, mapped_column
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from passlib.context import CryptContext
+import jwt
+from app.settings.settings import setting
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -30,3 +32,13 @@ class UserModel(Base):
 
     def __repr__(self): 
         return f"<User(id={self.id}, username={self.username}, email={self.email})>"
+
+    def genetate_token(self):
+        expire = datetime.now(timezone.utc) + timedelta(days = 30)
+        return {
+            "access_token": jwt.encode(
+                {"id": self.id, "username": self.username, "email": self.email, "exp": expire},
+                setting.SECRET_KEY()
+                
+            )
+        }

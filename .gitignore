@@ -1,22 +1,19 @@
 # Backend
-Backend/.python-version
-Backend/.venv
-Backend/.env
-Backend/backend.env
-Backend/.env.template
-Backend/alembic.ini
-Backend/app/.env
-__pycache__/
+*.python-version
+*.venv/
+*.env
 *.py[cod]
 *$py.class
 *.pyc
 *.pyo
+__pycache__/
+
 
 
 *.lock
 # Logs
-Backend/app/sqlalchemy.logs
-Backend/app/*.logs
+*.log
+*.logs
 # Frontend
 
 
