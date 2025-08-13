@@ -1,15 +1,14 @@
-import asyncio
+
 import uvicorn
-from routes import crud
-from fastapi import FastAPI, HTTPException, Depends, Request
-from fastapi.responses import JSONResponse
+from routes import crud, login
+from fastapi import FastAPI
 
 from contextlib import asynccontextmanager
-from settings.settings import setting, ping_db, engine
+from settings.settings import ping_db, engine
 from settings.dictConfig import LOGGING_CONFIG, logger
 from database.models.User import Base
 
-import logging
+
 
 
 
@@ -37,7 +36,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title = "Auth Service", lifespan = lifespan)
 
 app.include_router(crud.router)
-
+app.include_router(login.router)
 
 if __name__ == "__main__":
     try:
