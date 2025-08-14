@@ -64,7 +64,7 @@ class UserModel(Base):
         
         return {
             "access_token": self.create_access_token(),
-            "refresh_token": self.create_refresh_token()
+            "token_type":"bearer"
             }
     
 

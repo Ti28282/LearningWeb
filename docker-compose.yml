@@ -30,5 +30,13 @@ services:
     ports: 
       - "5050:80"
 
+  redis:
+    image: redis:latest
+    container_name: redis_container
+    environment:
+      - REDIS_PASSWORD=${RD_PASSWORD}
+      - REDIS_USER=${RD_USER}
+      - REDIS_USER_PASSWORD=${RD_USER_PASSWORD}
 
-  
+    ports:
+      - "6380:6379"  
