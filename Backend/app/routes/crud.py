@@ -1,11 +1,11 @@
 
 from schemas import UserSchema, UserDeleteSchema, UserUpdateSchema
-from database.models.User import UserModel, hash_password, verify_password
+from database.models.User import UserModel
 from settings.settings import  get_db
+from utils.HashUtils import create_hash, verify
 
 
-
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update
 
@@ -17,12 +17,22 @@ router = APIRouter(prefix = "/api/v0", tags = ["auth"])
 
 @router.post("/register_user")
 async def create_user(user_data: UserSchema, db: AsyncSession = Depends(get_db)):
-    hashed_password = hash_password(user_data.password)
+    hashed_password = create_hash(user_data.password)
+    user_search = await db.execute(select(UserModel).where(
+        UserModel.email == user_data.email
+    ))
     user = UserModel(
         username = user_data.username,
         email = user_data.email,
         password = hashed_password
     )
+
+    if user_search:
+        raise HTTPException(
+            status_code = status.HTTP_409_CONFLICT,
+            detail = "User already exists"
+        )
+    
     db.add(user)
     await db.commit()
     await db.refresh(user)
@@ -60,13 +70,13 @@ async def update_user(user_data: UserUpdateSchema, db: AsyncSession = Depends(ge
     
     
     if user is None: return error
-    if not verify_password(user_data.password, user.password):
+    if not verify(user_data.password, user.password):
         return {"error": "Wrong password"}
 
     await db.execute(update(UserModel).where(
        UserModel.email == user_data.email
     )
-    .values(password = hash_password(user_data.new_password), username = user_data.new_username)
+    .values(password = create_hash(user_data.new_password), username = user_data.new_username)
     .execution_options(synchronize_session = "fetch")
     )
 
@@ -85,7 +95,7 @@ async def delete_user(user_data: UserDeleteSchema, db: AsyncSession = Depends(ge
     
     if not user: return {"error": f"User {user_data.email} not found"}
     
-    if verify_password(user_data.password, user.password):
+    if verify(user_data.password, user.password):
         await db.delete(user)
         await db.commit()
         

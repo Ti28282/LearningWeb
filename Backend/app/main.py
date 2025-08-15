@@ -7,6 +7,7 @@ from contextlib import asynccontextmanager
 from settings.settings import ping_db, engine
 from settings.dictConfig import LOGGING_CONFIG, logger
 from database.models.User import Base
+from database import models
 
 
 
