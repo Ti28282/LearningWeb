@@ -5,73 +5,87 @@ from datetime import datetime, timezone, timedelta
 
 from database.models.User import UserModel, RefreshToken
 from settings.settings import AsyncSessionLocal, get_db
-from schemas import LoginSchema
+from schemas import LoginSchema, UserSchema
 from utils.HashUtils import create_hash, verify
-#from fastapi.security import OAuth2PasswordBearer
+from utils.JwtUtils import create_access_token, create_refresh_token
 
-router = APIRouter(prefix = "/api/v0/user", tags = ["login"])
+#from fastapi.security import OAuth2PasswordBearer
+#import aiohttp
+
+router = APIRouter(prefix = '/api/v0/user', tags = ['login'])
+
 #oauth2_scheme = OAuth2PasswordBearer(tokenUrl = "/login") 
 # ADD REFRESH Login Logout Refresh_Token token: str = Depends(oauth2_scheme)
 
-@router.get("/me")
-async def get_current_user(
+
+
+@router.post('/register')
+async def register(
+    user_data: UserSchema,
     db: AsyncSession = Depends(get_db)
-    ):
-    credentials_exception = HTTPException(
-        status_code = status.HTTP_401_UNAUTHORIZED,
-        detail = "Cloud not validate credentials",
-        headers = {
-            "WWW-Authenticate":"Bearer"
-        },
-    )
+):
+    
     return []
 
-@router.post("/login")
+
+@router.post('/login')
 async def login(user_data: LoginSchema, response: Response, db: AsyncSession = Depends(get_db)):
-    error = {"error": f"User {user_data.email} not found"}
-    # Result Select(args - > Models db.execute(select(UserModel)))
+    
+    
     result = await db.execute(select(UserModel).where(
         UserModel.email == user_data.email
     ))
 
     user = result.scalar_one_or_none()
 
-    if user == None:return error
+    if user == None:
+        raise HTTPException(
+            status_code = status.HTTP_404_NOT_FOUND,
+            detail = f"User {user_data.email} not found"
+        )
 
     #! problem
-    if verify(user_data.password, user.password):
-        expire_at = datetime.now(timezone.utc) + timedelta(days = 7)
-        Token = user.generate_token()
-        refresh_token = user.create_refresh_token()
+    elif not verify(user_data.password, user.password):
+        raise HTTPException(
+            status_code = status.HTTP_401_UNAUTHORIZED,
+            detail = 'Wrong Password'
+        )
         
-        hash_token = create_hash(refresh_token)
+    expire_at = datetime.now(timezone.utc) + timedelta(days = 7)
+    AccessToken, RefreshToken = user.generate_token()
+        
+    
+    hash_token = create_hash(RefreshToken)
 
-        db_token = RefreshToken(
+    db_token = RefreshToken(
             token = hash_token, 
             expires_at = expire_at,
             user_id = user.id
         )
-        db.add(db_token)
-        await db.commit(db_token)
+    db.add(db_token)
+    await db.commit()
         
 
-        response.set_cookie(
-            key = "refresh_token",
-            value = Token.get("refresh_token"),
+    response.set_cookie(
+            key = 'refresh_token',
+            value = RefreshToken,
             httponly = True,
             secure = True,
-            samesite = "strict",
+            samesite = 'strict',
             max_age = 60 * 60 * 24 * 7 # 7 days
             )
 
         
-        return Token
+    return {
+        "access_token": AccessToken,
+        "token_type": "bearer"
+        }
     
-    return {"error": "Wrong password"}
+    
 
 
 # ! Doing
-@router.post("/logout")
+@router.post('/logout')
 async def logout(
     request: Request,
     response: Response,
@@ -93,19 +107,20 @@ async def logout(
     response.delete_cookie("refresh_token")
     
 
-    return {"message":"Logged out successfully"}
+    return {'message':'Logged out successfully'}
 
 
 # ! Doing
-@router.post("/refresh")
+@router.post('/refresh')
 async def refresh_access_token(
     request: Request,
     response: Response, 
     db: AsyncSession = Depends(get_db)):
+    
     token = request.cookies.get("refresh_token")
 
     if not token:
-        raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED, detail = "Refresh token missing")
+        raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED, detail = 'Refresh token missing')
     
     result = await db.execute(select(RefreshToken))
     tokens = result.scalar().all()
@@ -118,9 +133,8 @@ async def refresh_access_token(
             break
 
 
-
-
-@router.get("/")
+'''
+@router.get('/')
 async def read_user_me(current_user: UserModel = Depends(get_current_user)):
     return {
         "id": current_user.id,
@@ -128,7 +142,7 @@ async def read_user_me(current_user: UserModel = Depends(get_current_user)):
         "email": current_user.email,
         "created_at": current_user.created_at
     }
-
+'''
 
 
 

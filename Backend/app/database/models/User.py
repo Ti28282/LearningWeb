@@ -34,11 +34,8 @@ class UserModel(Base):
 
     def generate_token(self):
         data = {'id': self.id, 'username': self.username, 'email': self.email}
-        return {
-            "access_token": create_access_token(data),
-            "refresh_token":create_refresh_token(data),
-            "token_type":"bearer"
-            }
+        return  create_access_token(data), create_refresh_token(data)
+            
 
     
 
