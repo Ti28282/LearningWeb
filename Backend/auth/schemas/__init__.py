@@ -26,4 +26,9 @@ class UserUpdateSchema(UserEmailSchema, UserPasswordSchema):
 
 class LoginSchema(UserEmailSchema, UserPasswordSchema):
     ...
-    
+
+
+class TokenSchema(BaseModel):
+    access_token: str
+    refresh_token: str
+    token_type: str = "bearer"

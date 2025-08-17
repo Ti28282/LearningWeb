@@ -1,21 +1,43 @@
-from fastapi import APIRouter, Depends, Response, Request, HTTPException, status
+from fastapi import (
+    APIRouter, 
+    Depends, 
+    Response, 
+    Request, 
+    HTTPException, 
+    status
+)
+from fastapi.security import  HTTPBasic, HTTPBasicCredentials
+
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from datetime import datetime, timezone, timedelta
+from typing import Dict, Annotated
+import secrets
 
 from database.models.User import UserModel, RefreshToken
-from settings.settings import AsyncSessionLocal, get_db
-from schemas import LoginSchema, UserSchema
-from utils.HashUtils import create_hash, verify
-from utils.JwtUtils import create_access_token, create_refresh_token
+from settings.settings import  get_db
+from schemas import LoginSchema, UserSchema, TokenSchema
+  
+from utils import (
+    create_access_token, 
+    create_refresh_token, 
+    decode_token, 
+    PyJWTError,
+    create_hash,
+    verify
+)
+from exceptions import InvalidError, NotFoundError
 
-#from fastapi.security import OAuth2PasswordBearer
-#import aiohttp
 
 router = APIRouter(prefix = '/api/v0/user', tags = ['login'])
-
-#oauth2_scheme = OAuth2PasswordBearer(tokenUrl = "/login") 
+security = HTTPBasic()
+ 
 # ADD REFRESH Login Logout Refresh_Token token: str = Depends(oauth2_scheme)
+
+async def get_user_by_email(db: AsyncSession, email: str):
+    result = await db.execute(select(UserModel).where(UserModel.email == email))
+    user =  result.scalar_one_or_none()
+    return user
 
 
 
@@ -26,36 +48,34 @@ async def register(
 ):
     
     return []
-
+#Annotated[HTTPBasicCredentials, Depends()]
 
 @router.post('/login')
-async def login(user_data: LoginSchema, response: Response, db: AsyncSession = Depends(get_db)):
+async def login(
+    response: Response, 
+    creds: LoginSchema, 
+    db: AsyncSession = Depends(get_db)) -> Dict[str, str]:
     
     
     result = await db.execute(select(UserModel).where(
-        UserModel.email == user_data.email
+        UserModel.email == creds.email
     ))
 
     user = result.scalar_one_or_none()
 
     if user == None:
-        raise HTTPException(
-            status_code = status.HTTP_404_NOT_FOUND,
-            detail = f"User {user_data.email} not found"
-        )
+        raise NotFoundError(detail = f"User {creds.email} not found")
 
-    #! problem
-    elif not verify(user_data.password, user.password):
-        raise HTTPException(
-            status_code = status.HTTP_401_UNAUTHORIZED,
-            detail = 'Wrong Password'
-        )
+    
+    elif not secrets.compare_digest(creds.password, user.password):
+        raise InvalidError
         
     expire_at = datetime.now(timezone.utc) + timedelta(days = 7)
-    AccessToken, RefreshToken = user.generate_token()
+    Token = user.generate_token()
+    
         
     
-    hash_token = create_hash(RefreshToken)
+    hash_token = create_hash(Token.get("refresh_token"))
 
     db_token = RefreshToken(
             token = hash_token, 
@@ -64,11 +84,11 @@ async def login(user_data: LoginSchema, response: Response, db: AsyncSession = D
         )
     db.add(db_token)
     await db.commit()
-        
+    # FIX BUGS AUTH2password
 
     response.set_cookie(
             key = 'refresh_token',
-            value = RefreshToken,
+            value = Token.get("refresh_token"),
             httponly = True,
             secure = True,
             samesite = 'strict',
@@ -77,7 +97,7 @@ async def login(user_data: LoginSchema, response: Response, db: AsyncSession = D
 
         
     return {
-        "access_token": AccessToken,
+        "access_token": Token.get("access_token"),
         "token_type": "bearer"
         }
     
@@ -99,7 +119,7 @@ async def logout(
         tokens = result.scalars().all()
 
         for rt in tokens:
-            if verify(refresh_token, rt.token):
+            if secrets.compare_digest(refresh_token, rt.token):
                 await db.delete(rt)
                 break
         await db.commit()
@@ -120,7 +140,7 @@ async def refresh_access_token(
     token = request.cookies.get("refresh_token")
 
     if not token:
-        raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED, detail = 'Refresh token missing')
+        raise InvalidError(detail = 'Refresh token missing')
     
     result = await db.execute(select(RefreshToken))
     tokens = result.scalar().all()
@@ -128,21 +148,29 @@ async def refresh_access_token(
     valid_token = None
 
     for rt in tokens:
-        if verify(token, rt.token_hash):
+        if secrets.compare_digest(token, rt.token_hash):
             valid_token = rt
             break
 
 
-'''
-@router.get('/')
-async def read_user_me(current_user: UserModel = Depends(get_current_user)):
+@router.get('/protect')
+async def read_user_me(creds: HTTPBasicCredentials = Depends(security), db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(UserModel).where(
+        UserModel.email == creds.username # Email
+    ))
+
+    user = result.scalar_one_or_none()
+
+    if not user:
+        raise NotFoundError
+    
+    elif not secrets.compare_digest(creds.password, user.password):
+        raise InvalidError
+    
     return {
-        "id": current_user.id,
-        "username": current_user.username,
-        "email": current_user.email,
-        "created_at": current_user.created_at
-    }
-'''
+        "email": creds.username    
+        }
+
 
 
 

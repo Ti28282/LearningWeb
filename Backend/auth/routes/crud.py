@@ -2,7 +2,7 @@
 from schemas import UserSchema, UserDeleteSchema, UserUpdateSchema
 from database.models.User import UserModel
 from settings.settings import  get_db
-from utils.HashUtils import create_hash, verify
+from utils import create_hash, verify
 
 
 from fastapi import APIRouter, Depends, HTTPException, status

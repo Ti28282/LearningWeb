@@ -1,10 +1,24 @@
-from sqlalchemy import String, DateTime, Column, func, Integer, ForeignKey
+from sqlalchemy import (
+    String, 
+    DateTime, 
+    Column, 
+    func, 
+    Integer, 
+    ForeignKey
+)
+
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import relationship
 from datetime import datetime, timezone, timedelta
 
-from utils.JwtUtils import create_access_token, create_refresh_token
-from utils.HashUtils import create_hash, verify 
+from utils import (
+    create_access_token, 
+    create_refresh_token,
+    create_hash,
+    verify
+)
+
+
 
 class Base(DeclarativeBase):
     pass
@@ -34,11 +48,8 @@ class UserModel(Base):
 
     def generate_token(self):
         data = {'id': self.id, 'username': self.username, 'email': self.email}
-        return  create_access_token(data), create_refresh_token(data)
+        return  {"access_token":create_access_token(data), "refresh_token":create_refresh_token(data)}
             
-
-    
-
 
 class RefreshToken(Base):
     __tablename__ = "refresh_tokens"

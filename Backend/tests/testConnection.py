@@ -1,5 +1,5 @@
 from fastapi.testclient import TestClient
-from app import app
+from auth import app
 
 clinet = TestClient(app)
 
