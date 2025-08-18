@@ -15,10 +15,12 @@ from typing import Dict, Annotated
 import secrets
 
 from models.User import UserModel, RefreshToken
-from core.database import get_db
-from schemas import LoginSchema, UserSchema, TokenSchema
-from services.helpers import find_user
-from utils import create_hash
+from schemas import LoginSchema
+
+from services.helpers import find_user, get_token
+
+from core.security import create_hash
+from core.database import get_db 
     
 
 from exceptions import InvalidError, NotFoundError
@@ -32,7 +34,8 @@ security = HTTPBasic()
 async def login(
     response: Response, 
     creds: LoginSchema, 
-    db: AsyncSession = Depends(get_db)) -> Dict[str, str]:
+    db: Annotated[AsyncSession, Depends(get_db)]
+) -> Dict[str, str]:
     
     user = await find_user(creds, db)
         
@@ -44,10 +47,10 @@ async def login(
     hash_token = create_hash(Token.get("refresh_token"))
 
     db_token = RefreshToken(
-            token = hash_token, 
-            expires_at = expire_at,
-            user_id = user.id
-        )
+        token = hash_token, 
+        expires_at = expire_at,
+        user_id = user.id
+    )
     db.add(db_token)
     await db.commit()
 
@@ -72,18 +75,18 @@ async def login(
 async def logout(
     request: Request,
     response: Response,
-    db: AsyncSession = Depends(get_db)):
+    db: Annotated[AsyncSession, Depends(get_db)]
+):
 
     refresh_token = request.cookies.get("refresh_token")
     
     if refresh_token:
-        result = await db.execute(select(RefreshToken))
 
-        tokens = result.scalars().all()
+        tokens = await get_token(db)
 
-        for rt in tokens:
-            if secrets.compare_digest(refresh_token, rt.token):
-                await db.delete(rt)
+        for RemoveToken in tokens:
+            if secrets.compare_digest(refresh_token, RemoveToken.token):
+                await db.delete(RemoveToken)
                 break
         await db.commit()
 
@@ -97,7 +100,8 @@ async def logout(
 @router.post('/refresh')
 async def refresh_access_token(
     request: Request,
-    db: AsyncSession = Depends(get_db)):
+    db: Annotated[AsyncSession, Depends(get_db)]
+):
     
     token = request.cookies.get("refresh_token")
 
@@ -116,7 +120,10 @@ async def refresh_access_token(
 
 
 @router.get('/protect')
-async def read_user_me(creds: HTTPBasicCredentials = Depends(security), db: AsyncSession = Depends(get_db)):
+async def read_user_me(
+    creds: Annotated[HTTPBasicCredentials, Depends(security)], 
+    db: Annotated[AsyncSession, Depends(get_db)]
+):
     result = await db.execute(select(UserModel).where(
         UserModel.email == creds.username # Email
     ))

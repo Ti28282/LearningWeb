@@ -1,7 +1,4 @@
-from fastapi import FastAPI, HTTPException, Depends, Request
-
 from pydantic import BaseModel, EmailStr, Field
-
 from dotenv import load_dotenv
 
 load_dotenv("/.env")
@@ -28,9 +25,6 @@ class LoginSchema(UserEmailSchema, UserPasswordSchema):
     ...
 
 
-class TokenSchema(BaseModel):
-    access_token: str
-    refresh_token: str
-    token_type: str = "bearer"
+
 
 

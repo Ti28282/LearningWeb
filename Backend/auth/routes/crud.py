@@ -1,11 +1,12 @@
 
 from schemas import UserSchema, UserDeleteSchema, UserUpdateSchema
 from models.User import UserModel
+
 from core.database import  get_db
-from utils import create_hash
+from core.security import create_hash
 
 from exceptions import ConflictError
-from services.helpers import find_user, get_all_users
+from services.helpers import find_user, get_all_users, get_user_by_email
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -17,11 +18,14 @@ router = APIRouter(prefix = '/api/v0', tags = ['auth'])
 
 
 @router.post('/register')
-async def create_user(user_data: UserSchema, db: AsyncSession = Depends(get_db)):
+async def create_user(
+    user_data: UserSchema,
+    db: AsyncSession = Depends(get_db)
+):
+    
     hashed_password = create_hash(user_data.password)
     
-    
-    user_exists = find_user(user_data = user_data, db = db)
+    user_exists = await get_user_by_email(email = user_data.email, db = db)
 
     if user_exists:
         raise ConflictError(detail = 'User already exists')

@@ -2,14 +2,11 @@ from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, create_async_engin
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import text
 from settings.log import logger
-from config import settings
-
-
-
-
+from core.config import settings
 
 
 engine: AsyncEngine = create_async_engine(settings.DATABASE_URL, echo = True)
+
 AsyncSessionLocal = sessionmaker(
     bind = engine,
     class_ = AsyncSession,
