@@ -1,14 +1,5 @@
 from os import getenv, path
 from dotenv import load_dotenv
-import os
-
-
-
-from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, create_async_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy import text
-from settings.dictConfig import logger
-
 
 
 dotenv_path = "./.env"
@@ -35,24 +26,7 @@ class Settings:
         return self.SECRET_KEY
 
 
-setting: Settings = Settings()
+settings: Settings = Settings()
 
 
 
-
-engine: AsyncEngine = create_async_engine(setting.DATABASE_URL, echo = True)
-AsyncSessionLocal = sessionmaker(
-    bind = engine,
-    class_ = AsyncSession,
-    expire_on_commit = False,
-    autoflush = False
-)
-
-async def ping_db():
-    async with engine.begin() as conn:
-        result = await conn.execute(text("SELECT 1"))
-        logger.info("Postgress Connected %s", result.scalar())
-
-async def get_db():
-    async with AsyncSessionLocal() as session:
-        yield session

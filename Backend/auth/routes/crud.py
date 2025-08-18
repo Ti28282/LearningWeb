@@ -1,17 +1,18 @@
 
 from schemas import UserSchema, UserDeleteSchema, UserUpdateSchema
-from database.models.User import UserModel
-from settings.settings import  get_db
-from utils import create_hash, verify
+from models.User import UserModel
+from core.database import  get_db
+from utils import create_hash
 
+from exceptions import ConflictError
+from services.helpers import find_user, get_all_users
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, update
+from sqlalchemy import  update
 
 router = APIRouter(prefix = '/api/v0', tags = ['auth'])
 
-HTTP_WRONG_PASSWORD =  HTTPException(status_code = status.HTTP_401_UNAUTHORIZED, detail = 'Wrong password')
 
 
 
@@ -19,17 +20,11 @@ HTTP_WRONG_PASSWORD =  HTTPException(status_code = status.HTTP_401_UNAUTHORIZED,
 async def create_user(user_data: UserSchema, db: AsyncSession = Depends(get_db)):
     hashed_password = create_hash(user_data.password)
     
-    result = await db.execute(select(UserModel).where(
-        UserModel.email == user_data.email
-    ))
     
-    user_exists = result.scalar_one_or_none()
+    user_exists = find_user(user_data = user_data, db = db)
 
     if user_exists:
-        raise HTTPException(
-            status_code = status.HTTP_409_CONFLICT,
-            detail = 'User already exists'
-        )
+        raise ConflictError(detail = 'User already exists')
     
     
     user = UserModel(
@@ -52,8 +47,8 @@ async def create_user(user_data: UserSchema, db: AsyncSession = Depends(get_db))
  
 @router.get('/read_users')
 async def get_users(db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(UserModel))
-    users = result.scalars().all()
+    
+    users = await get_all_users(db)
     
     
     return [{
@@ -69,14 +64,7 @@ async def get_users(db: AsyncSession = Depends(get_db)):
 async def update_user(user_data: UserUpdateSchema, db: AsyncSession = Depends(get_db)):
     
     
-    user = await db.execute(select(UserModel).where(UserModel.email == user_data.email))
-    user = user.scalar_one_or_none()
-    
-    if user is None: 
-        raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, detail = f'User {user_data.email} not found')
-    
-    elif not verify(user_data.password, user.password):
-        raise HTTP_WRONG_PASSWORD
+    user = await find_user(user_data, db)
 
     await db.execute(update(UserModel).where(
        UserModel.email == user_data.email
@@ -87,24 +75,13 @@ async def update_user(user_data: UserUpdateSchema, db: AsyncSession = Depends(ge
 
     await db.commit()
 
-    return {"message":f"User {user_data.email} update"}
+    return {"message":f"User {user.email} update"}
 
 
 @router.delete('/delete_user')
 async def delete_user(user_data: UserDeleteSchema, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(UserModel).where(
-        UserModel.email == user_data.email
-    ))
 
-    user = result.scalar_one_or_none()
-    
-    if not user: raise HTTPException(
-        status_code = status.HTTP_404_NOT_FOUND,
-        detail = f'User {user_data.email} not found'
-    )
-    
-    elif not verify(user_data.password, user.password):
-        raise HTTP_WRONG_PASSWORD
+    user = await find_user(user_data, db)
     
     await db.delete(user)
     await db.commit()

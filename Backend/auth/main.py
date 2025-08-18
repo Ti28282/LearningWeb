@@ -4,10 +4,11 @@ from routes import crud, login
 from fastapi import FastAPI
 
 from contextlib import asynccontextmanager
-from settings.settings import ping_db, engine
-from settings.dictConfig import LOGGING_CONFIG, logger
-from database.models.User import Base
-from database import models
+from core.database import ping_db, engine
+
+from settings.log import LOGGING_CONFIG, logger
+from models.User import Base
+import models
 
 
 

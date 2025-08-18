@@ -19,11 +19,6 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 def create_hash(string: str) -> str:
     return pwd_context.hash(string)
 
-def verify(plain_string: str, hashed_string: str) -> bool:
-    return pwd_context.verify(plain_string, hashed_string)
-
-
-
 def create_access_token(data: dict):
     expire = datetime.now(timezone.utc) + timedelta(minutes = ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode = {}

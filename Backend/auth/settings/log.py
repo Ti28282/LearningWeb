@@ -3,7 +3,7 @@ import logging.config
 
 logger = logging.getLogger(__name__)
 logging.getLogger("uvicorn.error").propagate = False
-#logging.getLogger("uvicorn.error").handlers.clear()
+
 logging.basicConfig(filename = "logs/App.log", level = logging.INFO)
 
 LOGGING_CONFIG = {
