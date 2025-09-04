@@ -17,6 +17,7 @@ __pycache__/
 *.log
 *.logs
 # Frontend
+/Tests
 /frontend
 Backend/auth/services
 # dependencies
@@ -62,3 +63,4 @@ next-env.d.ts
 # global 
 
 .env.docker
+.python-version*

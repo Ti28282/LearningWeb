@@ -1,5 +1,5 @@
 from fastapi.testclient import TestClient
-from Backend.auth.main import app
+from Backend.auth.app.main import app
 
 
 HTTP_URL = "127.0.0.1:5010/api/v0/"

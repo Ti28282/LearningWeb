@@ -13,13 +13,27 @@ services:
     ports:
       - "5432:5432"
 
-  api:
-      build: ./Backend
+  api_auth:
+      build: ./Backend/auth
       ports:
         - "5010:5010"
       depends_on:
         - db
 
+  api_monitoring:
+    build: ./Backend/monitoring
+    ports:
+      - "5012:5012"
+      
+    depends_on:
+      - db
+
+  api_notification:
+    build: ./Backend/notification
+    ports:
+      - "5011:5011"
+    depends_on:
+      - db
 
   adminer:
     image: dpage/pgadmin4
@@ -40,3 +54,4 @@ services:
 
     ports:
       - "6380:6379"  
+
