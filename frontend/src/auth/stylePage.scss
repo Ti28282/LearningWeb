@@ -1,0 +1,109 @@
+$primary-color: #00d8ff;
+$container-bg: #1a1a1a;
+$input-bg: #2a2a2a;
+$text-color: #ffffff;
+$secondary-text: #cccccc;
+$footer-text: #888888;
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  overflow: scroll;
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-image: url('../../public/3492868.gif');
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: $text-color;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+#squishy {
+  transition: transform 0.1s ease;
+}
+
+.login-container {
+  display: inline-block;
+  backdrop-filter: blur(5px);
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba($primary-color, 0.1);
+  width: 100vw;
+  max-width: 400px;
+  height: 500px;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 50px;
+    color: $primary-color;
+    font-weight: 500;
+  }
+
+  .form-group {
+    margin-bottom: 40px;
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: $secondary-text;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 14px 15px;
+      border: none;
+      border-radius: 6px;
+      background-color: $input-bg;
+      color: $text-color;
+      font-size: 16px;
+      transition: 0.3s ease;
+
+      &:focus {
+        outline: none;
+        border: 1px solid $primary-color;
+        background-color: darken($input-bg, 5%);
+      }
+    }
+  }
+
+  button {
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px;
+    background-color: $primary-color;
+    color: #000;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background: darken($primary-color, 10%);
+    }
+  }
+
+  .footer {
+    margin-top: 22px;
+    text-align: center;
+    font-size: 14px;
+    color: $footer-text;
+
+    a {
+      color: $primary-color;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
