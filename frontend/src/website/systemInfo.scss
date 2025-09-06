@@ -1,0 +1,97 @@
+/* Основное содержимое */
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  background-color: #1a1f36;
+  overflow-y: auto;
+
+    .card {
+        background-color: #1e293b;
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        margin-bottom: 2rem;
+
+      h2 {
+          font-size: 1.25rem;
+          font-weight: 600;
+          margin-bottom: 1rem;
+      }
+
+      .info-item {
+          margin-bottom: 0.75rem;
+
+        .label {
+            display: block;
+            font-size: 0.75rem;
+            color: #94a3b8;
+          }
+
+          .value {
+              font-weight: 500;
+          }
+      }
+
+        .graph {
+            margin-bottom: 1rem;
+
+            .graph-title {
+                display: block;
+                font-size: 0.875rem;
+                color: #94a3b8;
+                margin-bottom: 0.25rem;
+            }
+
+            .progress-bg {
+                background-color: #334155;
+                height: 0.5rem;
+                border-radius: 9999px;
+                overflow: hidden;
+                margin-bottom: 0.25rem;
+              
+                .progress-bar {
+                    height: 100%;
+                    border-radius: 9999px;
+
+                    &.blue {
+                        background-color: #60a5fa;
+                    }
+
+                    &.green {
+                        background-color: #4ade80;
+                    }
+                }
+            }
+        }
+        @media (max-width: 470px) {
+            &.sidebar-open {
+                display: none;
+            }
+        }
+    }
+}
+
+/* Цветовые классы */
+.blue {
+  color: #60a5fa;
+}
+
+.yellow {
+  color: #facc15;
+}
+
+.green {
+  color: #4ade80;
+}
+
+.indigo {
+  color: #818cf8;
+}
+
+.purple {
+  color: #a855f7;
+}
+
+.teal {
+  color: #14b8a6;
+}
