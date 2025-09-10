@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/react-transition-group": "^4.4.12",
     "axios": "^1.7.7",
     "cheerio": "^1.1.0",
     "dotenv": "^16.4.5",

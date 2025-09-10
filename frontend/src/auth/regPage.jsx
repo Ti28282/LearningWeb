@@ -1,36 +1,33 @@
 import React from "react";
 import './stylePage.scss'
 import { Link } from "react-router-dom";
-import { SquishyBox } from "../components/SquishyBox.jsx";
+import {CSSTransition, TransitionGroup} from 'react-transition-group';
+import { SquishyBox } from "../components/squishyBox.jsx";
 
 function RegPage() {
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        //<> Здесь должна быть логика регистрации
-        //<> После успешной регистрации можно перенаправить на /login
-    }
 
     return(
-        <SquishyBox>
-            <div className="login-container">
-                <h2>Регистрация</h2>
-                <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label htmlFor="login">Логин</label>
-                        <input type="text" id="login" placeholder="Введите email или логин" required />
+        <div id="entryMainReg">
+            <div className="containerRegDescription">
+                <div className="regCardOne">
+                    <p className="regText">Регистрация</p>
+                    <div className="groupEmailPass">
+                        <div className="groupForgot">
+                            <input type="text" className="loginPlace" placeholder="Логин"/>
+                            <input type="email" className="emailPlace" placeholder="Email"/>
+                            <input type="password" className="passPlace" placeholder="Пароль"/>
+                        </div>
+                        <button className="buttonEntry"><Link className="entry" to="/login">УЖЕ ЕСТЬ АККАУНТ</Link></button>
                     </div>
-                    <div className="form-group">
-                        <label htmlFor="password">Пароль</label>
-                        <input type="password" id="password" placeholder="Введите пароль" required />
+                </div>
+                <div className="regCardTwo">
+                    <div className="textDescription">
+                        <h1 className="textWelcome">Добро пожаловать в Name!</h1>
+                        <p className="text">С точки зpения банальной эpyдиции каждый индивидyyм, кpитически мотивиpyющий абстpакцию, не может игноpиpовать кpитеpии yтопического сyбьективизма.</p>
                     </div>
-                    <button type="submit">Зарегистрироваться</button>
-                </form>
-                <div className="footer"> Есть аккаунта?
-                    <Link to="/login"> Войти</Link>
                 </div>
             </div>
-        </SquishyBox>
-        
+        </div>
     )
 }
 export default RegPage;
