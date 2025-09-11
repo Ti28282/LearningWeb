@@ -18,8 +18,8 @@ function RoutePage() {
             <Suspense fallback={<div className="loadingSpinner">Loading...</div>}>
                 <Routes>
                     <Route path="/" element={
-                        // <PrivateRoute>
-                        {/* </PrivateRoute> */}
+                        <PrivateRoute>
+                        </PrivateRoute>
                     } />
                     <Route path="/recovery" element={<Recovery />} />
                     <Route path="/login" element={<LoginPage />} />
