@@ -1,0 +1,68 @@
+@import "../authorization/stylePage";
+
+#recoveryMain {
+    @extend #entryMainLogin !optional;
+
+    .containerRecovery {
+        @extend .containerEntryDescription;
+
+        .recoveryCardOne {
+            @extend .loginCardOne;
+
+            .recoverText {
+                @extend .entryText;
+            }
+
+            .recoveryEmail {
+                @extend .groupEmailPass;
+
+                .groupForgotRecovery {
+                    @extend .groupForgot;
+                    
+                    .emailPlaceRecovery {
+                        @extend .emailPlace;
+                    }
+
+                    .sendAgain {
+                        @extend .emailPlace;
+                    }
+                        
+                }
+                .buttonEntry {
+                    margin-top: 115px;
+                    @extend .buttonRegistration;
+
+                    .entry {
+                        @extend .registration;
+                    }
+                }
+                .buttonChange {
+                    width: 428px;
+                    height: 52.5px;
+                    background-color: #a9c6cd1e;
+                    border: 2px solid #6767672d;
+                    border-radius: $b19;
+                    z-index: -1000;
+                    opacity: 0;
+                }
+                .buttonSend {
+                    @extend .buttonChange;
+                }
+            }
+        }
+        .recoveryCardTwo {
+            @extend .loginCardTwo;
+
+            .textDescription {
+                @extend .textDescription;
+
+                .textWelcome {
+                    @extend .textWelcome;
+                }
+                .text {
+                        @extend .text;
+                }
+            }
+        }
+    }
+}
