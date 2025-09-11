@@ -6,8 +6,8 @@ from core.security import create_hash
 from core.config import settings
 from settings.log import logger
 
-from Backend.auth.app.exceptions import ConflictError, NotFoundError
-from Backend.auth.app.dependencies import get_all_users, find_user, get_user_by_email
+from app.exceptions import ConflictError, NotFoundError
+from app.dependencies import get_all_users, find_user, get_user_by_email
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
