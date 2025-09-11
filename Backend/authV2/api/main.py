@@ -23,9 +23,9 @@ app.add_middleware(
 register_tortoise(
     app,
     db_url = config.DATABASE_URL,
-    modules={"models": ["src.models"]},  # Укажи папку с моделями
-    generate_schemas=True,  # Автоматически создавать таблицы при запуске
-    add_exception_handlers=True,  # Обработка ошибок базы
+    modules={"models": ["models"]},
+    generate_schemas=True,
+    add_exception_handlers=True,  
 )
 
 
