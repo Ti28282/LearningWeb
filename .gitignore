@@ -20,7 +20,7 @@ Backend/tests/
 Tests/
 
 # Frontend
-
+.dockerIgnore
 
 # dependencies
 /node_modules

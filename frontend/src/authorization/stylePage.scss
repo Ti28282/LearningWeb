@@ -144,7 +144,7 @@ body {
 
 //ye Регистрация
 #entryMainReg {
-    @extend #entryMainLogin;
+    @extend #entryMainLogin !optional;
 
     .containerRegDescription {
         @extend .containerEntryDescription;
@@ -153,12 +153,46 @@ body {
             @extend .loginCardOne;
 
             .regText {
-                @extend entryText;
+                @extend .entryText;
+            }
+            .loginPlace {
+                @extend .emailPlace;
+            }
+            .buttonEntry {
+                @extend .buttonRegistration;
+
+                .entry {
+                    @extend .registration;
+                }
             }
         }
 
         .regCardTwo {
             @extend .loginCardTwo;
+        }
+    }
+}
+
+.pageTransition {
+    &-enter {
+        opacity: 1;
+        transform: translateX(100%);
+    
+        &-active {
+        opacity: 1;
+        transform: translateX(0);
+        transition: opacity 500ms ease-in-out, transform 500ms ease-in-out;
+        }
+    }
+  
+    &-exit {
+        opacity: 1;
+        transform: translateX(0);
+    
+        &-active {
+            opacity: 0;
+            transform: translateX(-100%);
+            transition: opacity 300ms ease-in-out, transform 300ms ease-in-out;
         }
     }
 }

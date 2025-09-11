@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import useMousePosition from "./useMousePosition";
-import '../auth/stylePage.scss'
+import '../authorization/stylePage.scss'
 
 export const SquishyBox = ({children}) => {
     const boxRef = useRef(null);
