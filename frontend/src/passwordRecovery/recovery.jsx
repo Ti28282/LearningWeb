@@ -1,4 +1,5 @@
-
+import { Link } from "react-router-dom";
+import './styleRecovery.scss'
 
 function Recovery() {
 
@@ -6,15 +7,15 @@ function Recovery() {
         <div id="recoveryMain">
             <div className="containerRecovery">
                 <div className="recoveryCardOne">
-                    <p className="entryText">Восстановление</p>
+                    <p className="recoverText">Восстановление</p>
                     <div className="recoveryEmail">
-                        <div className="groupForgot">
-                            <input type="email" className="emailPlace" placeholder="Email"/>
-                            <input type="text" placeholder="ОТПРАВИТЬ СНОВА"/><div>60сек</div>
+                        <div className="groupForgotRecovery">
+                            <input type="email" className="emailPlaceRecovery" placeholder="Email"/>
+                            <input type="text" className="sendAgain" placeholder="ОТПРАВИТЬ СНОВА"/><div>60сек</div>
                         </div>
                         <button className="buttonEntry"><Link className="entry" to="/login">ВХОД</Link></button>
-                        <button>СМЕНИТЬ ПОЧТУ</button>
-                        <button>ОТПРАВИТЬ КОД</button>
+                        <button className="buttonChange">СМЕНИТЬ ПОЧТУ</button>
+                        <button className="buttonSend">ОТПРАВИТЬ КОД</button>
                     </div>
                 </div>
                 <div className="recoveryCardTwo">
