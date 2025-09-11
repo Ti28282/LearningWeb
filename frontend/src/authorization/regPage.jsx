@@ -2,7 +2,7 @@ import React from "react";
 import './stylePage.scss'
 import { Link } from "react-router-dom";
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
-import { SquishyBox } from "../components/squishyBox.jsx";
+import { SquishyBox } from "../components/SquishyBox.jsx";
 
 function RegPage() {
 
