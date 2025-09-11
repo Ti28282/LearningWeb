@@ -1,6 +1,13 @@
 services:
+  react:
+    build:
+      context: ./frontend
+      dockerfile: DockerFile
+    ports:
+      - "3000:3000"
+    container_name: react-app
 
-  
+ 
   db:
     image: postgres
     container_name: postgresDB
