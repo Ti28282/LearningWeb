@@ -2,8 +2,8 @@ import React, { useContext } from "react";
 import './stylePage.scss'
 import { Link } from "react-router-dom";
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
-import { SquishyBox } from "../components/squishyBox.jsx";
-import { AuthContext } from "../components/authContext.jsx";
+import { SquishyBox } from "../components/SquishyBox.jsx";
+import { AuthContext } from "../components/AuthContext.jsx";
 
 function LoginPage() {
 
