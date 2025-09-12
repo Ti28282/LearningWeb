@@ -1,26 +1,44 @@
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import './stylePage.scss'
 import { Link } from "react-router-dom";
-import {CSSTransition, TransitionGroup} from 'react-transition-group';
-import { SquishyBox } from "../components/SquishyBox.jsx";
+import {CSSTransition} from 'react-transition-group';
 import { AuthContext } from "../components/AuthContext.jsx";
 
 function LoginPage() {
+    const [emailDataFilled, setEmailDataFilled] = useState("")
+    const [passDataFilled, setPassDataFilled] = useState("")
+
+    const stateEmailFilled = (e) => {
+        setEmailDataFilled(e.target.value)
+    }
+    const statePassFilled = (e) => {
+        setPassDataFilled(e.target.value)
+    }
+
+    const areFieldsFilled = emailDataFilled.trim() !== "" && passDataFilled.trim() !== "";
 
     return(
         <div id="entryMainLogin">
             <div className="containerEntryDescription">
-                <div className="loginCardOne">
-                    <p className="entryText">Вход</p>
-                    <div className="groupEmailPass">
-                        <div className="groupForgot">
-                            <input type="email" className="emailPlace" placeholder="Email"/>
-                            <input type="password" className="passPlace" placeholder="Пароль"/>
-                            <button className="forgotPass">ЗАБЫЛИ ПАРОЛЬ</button>
+                <CSSTransition
+                    in={true}
+                    appear={true}
+                    timeout={500}
+                    classNames="pageTransition"
+                >
+                    <div className="loginCardOne">
+                        <p className="entryText">Вход</p>
+                        <div className="groupEmailPass">
+                            <div className="groupForgot">
+                                <input type="email" className="emailPlace" placeholder="Email" onChange={stateEmailFilled}/>
+                                <input type="password" className="passPlace" placeholder="Пароль" onChange={statePassFilled}/>
+                                <button className="forgotPass">ЗАБЫЛИ ПАРОЛЬ</button>
+                            </div>
+                            <button className={`buttonRegistration ${areFieldsFilled ? 'hidden' : ''}`}><Link className="registration" to="/register">РЕГИСТРАЦИЯ</Link></button>
+                            <button className={`buttonLog ${areFieldsFilled ? 'visible' : ''}`}>ВОЙТИ</button>
                         </div>
-                        <button className="buttonRegistration"><Link className="registration" to="/register">РЕГИСТРАЦИЯ</Link></button>
                     </div>
-                </div>
+                </CSSTransition>
                 <div className="loginCardTwo">
                     <div className="textDescription">
                         <h1 className="textWelcome">Добро пожаловать в Name!</h1>

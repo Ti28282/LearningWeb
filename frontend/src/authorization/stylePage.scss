@@ -16,6 +16,19 @@ body {
     background: url("../../public/3492868.gif");
 }
 
+.pageTransition {
+    &-appear {
+        opacity: 0;
+        transform: translateY(0%);
+        
+        &-active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 500ms ease-in-out, transform 500ms ease-in-out;
+        }
+    }
+}
+
 //ye Авторизация
 #entryMainLogin {
     width: 100%;
@@ -36,11 +49,13 @@ body {
         .loginCardOne {
             display: flex;
             flex-direction: column;
-            border: 4px solid #e5e7eb0a;
+            border: 4px solid #e5e7eb08;
             color: white;
             width: 470px;
             height: 550px;
             backdrop-filter: blur(20px);
+            background-color: #1212120d;
+            gap: 45px;
 
             .entryText {
                 margin-top: 30px;
@@ -50,7 +65,8 @@ body {
                 color: #828697;
             }
             .groupEmailPass {
-                margin-top: 45px;
+                // position: relative;
+                // top: 45px;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
@@ -64,15 +80,21 @@ body {
                     .emailPlace {
                         width: 410px;
                         height: 49px;
-                        background-color: #67676710;
-                        border: 2px solid #67676741;
+                        background-color: #6767670d;
+                        border: 2px solid #67676733;
                         border-radius: $b19;
                         font-size: 20px;
                         font-family: $gb;
                         padding-left: 14px;
+                        color: white;
 
                         &::placeholder {
                             color: #dbdbdb80;
+                        }
+
+                        &:focus {
+                            border: 2px solid #4D5EA8;
+                            transition: 300ms;
                         }
                     }
                     .passPlace {
@@ -90,6 +112,14 @@ body {
                         color: #7D7E82;
                         letter-spacing: 1px;
                         cursor: pointer;
+                        transition: 250ms;
+
+                        &:hover {
+                            color: white;
+                            background-color: #4d5ea833;
+                            border: 2px solid #adbcff1a;
+                            transition: 250ms;
+                        }
                     }
                 }
 
@@ -100,14 +130,70 @@ body {
                     background-color: #a9c6cd1e;
                     border: 2px solid #6767672d;
                     border-radius: $b19;
+                    opacity: 1;
+                    z-index: 10;
+                    transform: translateY(0);
+                    transition: 250ms;
 
                     .registration {
-                        color: #FFF;
+                        border-radius: $b19;
+                        padding: 14px 140px 14px 135px;
+                        color: #7D7E82;
                         font-size: $b19;
                         font-family: $gb;
                         font-weight: bold;
                         text-decoration: none;
                         letter-spacing: 2px;
+
+                        &:hover {
+                            color: #FFF;
+                        }
+                    }
+
+                    &:hover {
+                        background-color: #4DD7F699;
+                        border: 2px solid #16343B;
+                    }
+
+                    &.hidden {
+                        opacity: 0;
+                        z-index: -10;
+                        transform: translateY(-20px);
+                        pointer-events: none;
+                        transition: 250ms;
+                    }
+                }
+                .buttonLog {
+                    margin-top: 349px;
+                    position: absolute;
+                    width: 428px;
+                    height: 51.5px;
+                    background-color: #a9c6cd1e;
+                    border: 2px solid #6767672d;
+                    border-radius: $b19;
+                    color: #7D7E82;
+                    font-size: $b19;
+                    font-family: $gb;
+                    font-weight: bold;
+                    letter-spacing: 2px;
+                    opacity: 0;
+                    z-index: -10;
+                    transform: translateY(-20px);
+                    pointer-events: none;
+                    transition: 250ms;
+
+                    &:hover {
+                        color: #FFF;
+                        background-color: #4DD7F699;
+                        border: 2px solid #16343B;
+                    }
+
+                    &.visible {
+                        opacity: 1;
+                        z-index: 10;
+                        transform: translateY(0);
+                        pointer-events: auto;
+                        transition: 250ms;
                     }
                 }
             }
@@ -117,6 +203,7 @@ body {
             height: 550px;
             border: 4px solid #e5e7eb0a;
             color: white;
+            background-color: #1212120d;
             backdrop-filter: blur(20px);
 
             .textDescription {
@@ -162,8 +249,23 @@ body {
                 @extend .buttonRegistration;
 
                 .entry {
-                    @extend .registration;
+                    border-radius: $b19;
+                    padding: 14px 107px 14px 107px;
+                    color: #7D7E82;
+                    font-size: $b19;
+                    font-family: $gb;
+                    font-weight: bold;
+                    text-decoration: none;
+                    letter-spacing: 2px;
+
+                    &:hover {
+                        color: #FFF;
+                    }
                 }
+            }
+            
+            .buttonRegister {
+                @extend .buttonLog
             }
         }
 

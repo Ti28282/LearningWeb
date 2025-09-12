@@ -1,4 +1,6 @@
 @import "../authorization/stylePage";
+@import url('https://fonts.cdnfonts.com/css/gilroy-bold');
+$gb: 'Gilroy-Medium', sans-serif;
 
 #recoveryMain {
     @extend #entryMainLogin !optional;
@@ -10,7 +12,15 @@
             @extend .loginCardOne;
 
             .recoverText {
+                opacity: 1;
+                position: relative;
                 @extend .entryText;
+            }
+            
+            .confirmationText{
+                opacity: 0;
+                position: absolute;
+                @extend .entryText
             }
 
             .recoveryEmail {
@@ -23,17 +33,40 @@
                         @extend .emailPlace;
                     }
 
-                    .sendAgain {
-                        @extend .emailPlace;
+                    .timeSend {
+                        display: flex;
+                        align-items: center;
+                        position: relative;
+
+                        .sendAgain {
+                            @extend .emailPlace;
+                        }
+
+                        .time {
+                            margin-right: 13px;
+                            font-size: 21px;
+                            font-family: $gb;
+                            color: #828697;
+                            position: absolute;
+                            right: 0;
+                        }
                     }
-                        
+                    
                 }
                 .buttonEntry {
-                    margin-top: 115px;
+                    margin-top: 180px;
                     @extend .buttonRegistration;
 
                     .entry {
                         @extend .registration;
+                    }
+
+                    &.hidden {
+                        opacity: 0;
+                        z-index: -10;
+                        transform: translateY(-20px);
+                        pointer-events: none;
+                        transition: 250ms;
                     }
                 }
                 .buttonChange {
@@ -42,11 +75,42 @@
                     background-color: #a9c6cd1e;
                     border: 2px solid #6767672d;
                     border-radius: $b19;
-                    z-index: -1000;
+                    z-index: -10;
                     opacity: 0;
                 }
                 .buttonSend {
-                    @extend .buttonChange;
+                    width: 428px;
+                    height: 52.5px;
+                    background-color: #a9c6cd1e;
+                    border: 2px solid #6767672d;
+                    border-radius: $b19;
+                    top: 470px;
+                    position: absolute;
+                    border-radius: $b19;
+                    color: #7D7E82;
+                    font-size: $b19;
+                    font-family: $gb;
+                    font-weight: bold;
+                    letter-spacing: 2px;
+                    opacity: 0;
+                    z-index: -10;
+                    transform: translateY(-20px);
+                    pointer-events: none;
+                    transition: 250ms;
+
+                    &:hover {
+                        color: #FFF;
+                        background-color: #4DD7F699;
+                        border: 2px solid #16343B;
+                    }
+
+                    &.visible {
+                        opacity: 1;
+                        z-index: 10;
+                        transform: translateY(0px);
+                        pointer-events: auto;
+                        transition: 250ms;
+                    }
                 }
             }
         }
