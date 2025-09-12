@@ -15,10 +15,10 @@ import secrets
 
 from models.User import UserModel, RefreshTokenTable
 from schemas import LoginSchema, TokenSchema
-from Backend.auth.app.dependencies import find_user, get_user_by_token, find_user, async_dependency
+from dependencies import find_user, get_user_by_token, find_user, async_dependency
 from core.security import create_hash, create_access_token, create_refresh_token
 from core.database import get_db
-from Backend.auth.app.exceptions import InvalidError, NotFoundError
+from exceptions import InvalidError, NotFoundError
 
 
 router = APIRouter(prefix = '/api/v0/user', tags = ['login'])

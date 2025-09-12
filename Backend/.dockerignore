@@ -1,0 +1,6 @@
+.venv/
+monitoring/
+notification/
+.python-version
+uv.lock
+auth_v2/

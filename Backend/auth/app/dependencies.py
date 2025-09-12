@@ -8,8 +8,8 @@ from core.security import oauth2_scheme, decode_token, verify_password
 from core.database import get_db
 from schemas import LoginSchema
 from models.User import UserModel, RefreshTokenTable
-from Backend.auth.app.exceptions import InvalidError, NotFoundError
-from settings.log import logger
+from exceptions import InvalidError, NotFoundError
+#from settings.log import logger
 
 '''
 async def current_user(
@@ -62,12 +62,12 @@ async def get_user_by_email(
 async def verify_user(user: UserModel, password: str) -> None:
     
     if user is None:
-        logger.error(f"User {user.email} not found")
+        #logger.error(f"User {user.email} not found")
         raise NotFoundError(detail = f"User {user.email} not found")
 
     
     if not verify_password(plain_password = password.encode(), hashed_password = user.password.encode()):    
-        logger.error("Incorrect email or password")
+        #logger.error("Incorrect email or password")
         raise InvalidError(detail = "Incorrect email or password")
     
 

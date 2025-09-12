@@ -2,6 +2,7 @@ import logging
 import logging.config
 
 logger = logging.getLogger(__name__)
+"""
 logging.getLogger("uvicorn.error").propagate = False
 
 logging.basicConfig(filename = "logs/App.log", level = logging.INFO)
@@ -46,4 +47,4 @@ LOGGING_CONFIG = {
     },
 }
 
-logging.config.dictConfig(LOGGING_CONFIG)
+logging.config.dictConfig(LOGGING_CONFIG)"""

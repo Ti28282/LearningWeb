@@ -6,8 +6,8 @@ from core.security import create_hash
 from core.config import settings
 from settings.log import logger
 
-from app.exceptions import ConflictError, NotFoundError
-from app.dependencies import get_all_users, find_user, get_user_by_email
+from exceptions import ConflictError, NotFoundError
+from dependencies import get_all_users, find_user, get_user_by_email
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -50,11 +50,11 @@ async def create_user(
             }
         
         async with httpx.AsyncClient as session:
-            logger.info(f"{settings.URL_NOTIFICATION}/register")
+            #logger.info(f"{settings.URL_NOTIFICATION}/register")
             
             response = await session.post(f"{settings.URL_NOTIFICATION}/register", json = pd)
-
-            logger.info(f"status code httpx.AsyncClient <{response.status}>")
+            
+            #logger.info(f"status code httpx.AsyncClient <{response.status}>")
             return {
                 "success":True,
                 "email": user.email,
@@ -62,7 +62,7 @@ async def create_user(
             }
 
     except:
-        logger.error(f"Server-Cors {settings.URL_NOTIFICATION}/notification") 
+        #logger.error(f"Server-Cors {settings.URL_NOTIFICATION}/notification") 
         return {
             "success":False,
             "Error":"Bad Notification Service"

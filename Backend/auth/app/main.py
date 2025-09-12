@@ -11,7 +11,7 @@ from contextlib import asynccontextmanager
 from routes import crud, login
 from core.database import ping_db, engine
 
-from settings.log import LOGGING_CONFIG, logger
+#from settings.log import LOGGING_CONFIG, logger
 
 from models.User import Base
 import models
@@ -31,10 +31,10 @@ async def lifespan(app: FastAPI):
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
             
-            logger.info("Tables checked/created")
+            #logger.info("Tables checked/created")
     except Exception as e:
         
-        logger.error("Error connection %s", str(e))
+        #logger.error("Error connection %s", str(e))
 
 
         raise e
@@ -43,7 +43,7 @@ async def lifespan(app: FastAPI):
     # todo logging end
 
 
-    logger.error("Close connection")
+    #logger.error("Close connection")
     await engine.dispose()
 
 
@@ -63,10 +63,11 @@ if __name__ == "__main__":
         
         uvicorn.run(
         "main:app",
-        host = "127.0.0.1",
+        host = "0.0.0.0",
         port = 5010,
         reload = True,
-        log_config = LOGGING_CONFIG
+        log_level="debug" 
+        #log_config = LOGGING_CONFIG
     ) 
     except KeyboardInterrupt:
         pass

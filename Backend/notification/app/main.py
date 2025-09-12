@@ -11,7 +11,7 @@ import time
 load_dotenv()
 
 
-logger = Logger(__name__)
+#logger = Logger(__name__)
 
 
 app = FastAPI(title = "Notification Service")
@@ -46,7 +46,7 @@ async def send_message(pd: dict):
            
             
        # logger.info(f"status code <{response.status_code}>")
-        logger.info("GOOD")
+        #logger.info("GOOD")
 
 
 """
@@ -55,7 +55,7 @@ async def send_message(pd: dict):
 
 @app.post("/notification/register")
 async def register(data: RegisterRequest):
-    logger.info(f"{data.username}:{data.email}-->")
+    #logger.info(f"{data.username}:{data.email}-->")
     message = (
         f"🆕 <b>Новая регистрация</b>\n"
         f"Пользователь: {data.username}\n"
@@ -95,7 +95,7 @@ def status():
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, port = 5002)
+    uvicorn.run(app, host= "0.0.0.0",port = 5002)
 
 
 

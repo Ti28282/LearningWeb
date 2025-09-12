@@ -17,7 +17,7 @@ AsyncSessionLocal = sessionmaker(
 async def ping_db():
     async with engine.begin() as conn:
         result = await conn.execute(text("SELECT 1"))
-        logger.info("Postgress Connected %s", result.scalar())
+        #logger.info("Postgress Connected %s", result.scalar())
 
 async def get_db():
     async with AsyncSessionLocal() as session:
