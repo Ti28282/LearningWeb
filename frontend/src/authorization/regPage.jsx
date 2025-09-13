@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import './stylePage.scss'
 import { Link } from "react-router-dom";
 import {CSSTransition} from 'react-transition-group';
-import { SquishyBox } from "../components/SquishyBox.jsx";
+import { useNavigate } from "react-router-dom";
 
 function RegPage() {
     const [loginDataFilled, setLoginDataFilled] = useState("")
