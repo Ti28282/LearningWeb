@@ -10,6 +10,6 @@ RUN uv sync --locked
 
 EXPOSE 5010
 
-CMD ["uvicorn", "app:app", "--port", "5010", "--host", "0.0.0.0"]
+CMD ["uv","run", "app/main.py"]
 
 
