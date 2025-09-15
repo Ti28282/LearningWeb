@@ -29,8 +29,9 @@ function RegPage() {
                     appear={true}
                     timeout={500}
                     classNames="pageTransition"
+                    useRef={nodeRef}
                 >
-                    <div className="regCardOne">
+                    <div className="regCardOne" ref={nodeRef}>
                         <p className="regText">Регистрация</p>
                         <div className="groupEmailPass">
                             <div className="groupForgot">

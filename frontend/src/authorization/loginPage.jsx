@@ -1,14 +1,18 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useRef } from "react";
 import './stylePage.scss'
 import { Link, useNavigate } from "react-router-dom";
 import { CSSTransition } from 'react-transition-group';
 import { AuthContext } from "../components/AuthContext.jsx";
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
+
 function LoginPage() {
-    const [emailDataFilled, setEmailDataFilled] = useState("")
-    const [passDataFilled, setPassDataFilled] = useState("")
-    const [error, setError] = useState("")
+    const [emailDataFilled, setEmailDataFilled] = useState("");
+    const [passDataFilled, setPassDataFilled] = useState("");
+    const [error, setError] = useState("");
+    const nodeRef = useRef(null);
 
 
     //! КОНТЕКСТ АУТЕНТИФИКАЦИИ И НАВИГАЦИЯ
@@ -37,18 +41,18 @@ function LoginPage() {
         if(!areFieldsFilled) return //? Если поля не заполнены выходим
 
         setError("") //? Сброс ошибок
-
         try{
-            const response = await axios.post('http://93.157.248.178:5010/api/v0/user/login', {
-                email: emailDataFilled,
-                password: passDataFilled,
-            }, {
-                headers: {
-                    'Content-Type': 'aplication/json' //? Указываем тип данных
-                }
-            })
+            const response = await axios.post(`${API_URL}/api/v0/user/login`, 
+                {
+                    user_data: {
+                        email: emailDataFilled,
+                        password: passDataFilled,
+                    }
+                }, {
+            }); console.log(response.data)
+            
 
-            if(response.status == 200) {
+            if(response.status >= 200 && response.status < 300) {
                 //? Сохраняем токен в localStorage для последующих запросов
                 const token = response.data.access_token;
                 if(token) {
@@ -92,8 +96,9 @@ function LoginPage() {
                     appear={true}
                     timeout={500}
                     classNames="pageTransition"
+                    useRef={nodeRef}
                 >
-                    <div className="loginCardOne">
+                    <div className="loginCardOne" ref={nodeRef}>
                         <p className="entryText">Вход</p>
                         <div className="groupEmailPass">
                             <div className="groupForgot">
@@ -116,7 +121,7 @@ function LoginPage() {
                                 onClick={handleLogin}
                                 >
                                     ВОЙТИ
-                                </button>
+                            </button>
                         </div>
                     </div>
                 </CSSTransition>
