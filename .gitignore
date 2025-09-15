@@ -10,7 +10,7 @@ __pycache__/
 .vscode/
 
 
-auth_v2/
+#auth_v2/
 
 
 *.lock

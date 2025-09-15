@@ -1,0 +1,55 @@
+{
+
+    "Регистрация":{
+        "https://ip:5001/regiter" : {
+            "login":"TEST_ROOT",
+            "email":"test_root@gmail.com",
+            "password":"test_root",
+            "answer":{
+                "status": "OK",
+                "error":"This email is exists",
+                "error_":"ucorrect password or email or login"
+                
+            }
+            
+        
+        },
+
+        
+        "https://ip:5001/login":{
+            "email":"test_root@gmail.com",
+            "password":"test_root",
+            "answer":{
+                "access_token": "JWT-ekfwofkwefwe",
+                
+                "NOT JSON":{"cookies":{"refresh_token":"JWT-egkweogkweogke"}},
+            
+                "error": {"msg":"Not found 404"},
+                "error_": {"msg":"Error login or password"}
+            }
+            
+
+        
+        },
+        
+        "https://ip:5002/notification":{
+            "email":"test_root@gmail.com",
+            "answer": {
+                "success": {"code":"234-242"},
+                "errors": {
+                    "msg":"Wrong Email"
+                }
+                
+            }
+        }
+
+        
+    }
+
+    }
+
+
+
+
+
+

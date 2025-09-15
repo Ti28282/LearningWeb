@@ -17,7 +17,7 @@ from models.User import Base
 import models
 # Connect Notification Tg
 
-
+from fastapi.middleware.cors import CORSMiddleware
 
 
 
@@ -52,6 +52,21 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title = "Auth Service", lifespan = lifespan)
 
+origins = [
+    "http://0.0.0.0:3000",
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+
 
 
 app.include_router(crud.router)
@@ -63,7 +78,7 @@ if __name__ == "__main__":
         
         uvicorn.run(
         "main:app",
-        host = "0.0.0.0",
+        host = "192.168.101.14",
         port = 5010,
         reload = True,
         log_level="debug" 
