@@ -1,4 +1,4 @@
-@import "../authorization/stylePage";
+@import "../authorization/stylePage.scss";
 @import url('https://fonts.cdnfonts.com/css/gilroy-bold');
 $gb: 'Gilroy-Medium', sans-serif;
 
@@ -39,7 +39,42 @@ $gb: 'Gilroy-Medium', sans-serif;
                         position: relative;
 
                         .sendAgain {
-                            @extend .emailPlace;
+                            height: 49px;
+                            background-color: #6767670d;
+                            border: 2px solid #67676733;
+                            border-radius: $b19;
+                            font-size: 20px;
+                            font-family: $gb;
+                            padding-left: 14px;
+                            text-align: left;
+                            color: #7D7E82;
+                            width: 429px;
+                            position: relative;
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                            cursor: pointer;
+                            transition: all 250ms;
+
+                            // Стили для disabled состояния во время таймера
+                            &:disabled {
+                                cursor: not-allowed;
+                                opacity: 0.7;
+                                background-color: #6767671a;
+                            }
+
+                            &.sendAgain.visible {
+                                opacity: 1;
+                                z-index: 10;
+                                transform: translateY(0px);
+                                pointer-events: auto;
+                            }
+                            &.sendAgain.hidden {
+                                position: absolute;
+                                opacity: 0;
+                                z-index: -10;
+                                pointer-events: none;
+                            }
                         }
 
                         .time {
@@ -47,14 +82,12 @@ $gb: 'Gilroy-Medium', sans-serif;
                             font-size: 21px;
                             font-family: $gb;
                             color: #828697;
-                            position: absolute;
-                            right: 0;
                         }
                     }
                     
                 }
                 .buttonEntry {
-                    margin-top: 180px;
+                    margin-top: 234px;
                     @extend .buttonRegistration;
 
                     .entry {
@@ -97,6 +130,7 @@ $gb: 'Gilroy-Medium', sans-serif;
                     transform: translateY(-20px);
                     pointer-events: none;
                     transition: 250ms;
+                    cursor: pointer;
 
                     &:hover {
                         color: #FFF;

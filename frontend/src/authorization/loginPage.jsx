@@ -52,7 +52,7 @@ function LoginPage() {
             }); console.log(response.data)
             
 
-            if(response.status >= 200 && response.status < 300) {
+            if(response.status >= 200 && response.status <= 300) {
                 //? Сохраняем токен в localStorage для последующих запросов
                 const token = response.data.access_token;
                 if(token) {
@@ -96,7 +96,7 @@ function LoginPage() {
                     appear={true}
                     timeout={500}
                     classNames="pageTransition"
-                    useRef={nodeRef}
+                    nodeRef={nodeRef}
                 >
                     <div className="loginCardOne" ref={nodeRef}>
                         <p className="entryText">Вход</p>
